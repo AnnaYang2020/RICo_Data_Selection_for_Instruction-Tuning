@@ -70,9 +70,7 @@ python rico_selection/compute_assessment_ppl.py \
     --target-model llama3-8B
 ```
 
-This stage computes `PPL(S)`: the target model's perplexity on each assessment sample without a candidate demonstration. It is required as the normalization denominator in the RICo influence score. This is the role of the former `101-ppl1.py`; the stage is necessary and has been retained as `compute_assessment_ppl.py`.
-
-The original implementation opens this output in append mode. Start from a nonexistent or empty output file when beginning a fresh reproduction run.
+This stage computes `PPL(S)`: the target model's perplexity on each assessment sample without a candidate demonstration. It is required as the normalization denominator in the RICo influence score. 
 
 ### 3. Compute candidate-conditioned perplexity
 
@@ -96,7 +94,7 @@ python rico_selection/compute_random_context_ppl.py \
     --candidate-file data/candidates/000-input_Alpaca5000_sampled_data.json
 ```
 
-This stage replaces each candidate context with a length-matched random context and computes the control perplexity. No seed is set because the original implementation did not set one; adding a fixed seed would change the generated control contexts and therefore would not be semantically identical.
+This stage replaces each candidate context with a length-matched random context and computes the control perplexity.
 
 ### 5. Aggregate global RICo scores
 
@@ -132,7 +130,7 @@ bash training/run_train_classifier.sh \
     meta-llama/Llama-3.1-8B
 ```
 
-The wrapper preserves the reported classifier settings: 5 epochs, learning rate `5e-5`, LoRA rank 8, and LoRA alpha 8.
+The classifier uses 5 epochs, learning rate `5e-5`, LoRA rank 8, and LoRA alpha 8.
 
 ### 8. Score the full candidate pool
 
@@ -174,25 +172,23 @@ bash training/run_instruction_tuning.sh \
     meta-llama/Llama-3.1-8B
 ```
 
-The wrapper preserves the original snapshot's executable settings: 3 epochs, AdamW, learning rate `2e-5`, per-device batch size 4, gradient accumulation 8, and DeepSpeed offloading. The paper reports an effective batch size of 128; reproduce that total by adjusting the number of processes and/or gradient accumulation for the available GPU count. Alpaca uses a maximum input length of 512 in `training/train.py`.
+The provided wrapper uses 3 epochs, AdamW, a learning rate of `2e-5`, a per-device batch size of 4, 8 gradient-accumulation steps, and DeepSpeed offloading.
 
-## Legacy filename mapping
+## Code overview
 
-The original numbered filenames were replaced with descriptive names. This table preserves the correspondence for old notes and commands.
-
-| Original file | Current file | Purpose |
-| --- | --- | --- |
-| `inference_selection/100_get_training_data.py` | `rico_selection/sample_candidates.py` | Candidate sampling and prompt formatting |
-| `inference_selection/101-ppl1.py` | `rico_selection/compute_assessment_ppl.py` | Baseline `PPL(S)` |
-| `inference_selection/102-ppl2.py` | `rico_selection/compute_context_ppl.py` | Candidate-conditioned `PPL(S\|T)` |
-| `inference_selection/103-ppl3.py` | `rico_selection/compute_random_context_ppl.py` | Random-context control |
-| `inference_selection/104-A-allB_ppl_data.py` | `rico_selection/compute_rico_scores.py` | Global RICo score aggregation |
-| `000_setup_classifier.py` | `rico_selection/prepare_classifier_data.py` | Classifier label/data preparation |
-| `001_contribution_from_classifier.py` | `rico_selection/score_candidates.py` | Full-pool classifier scoring |
-| `002_get_top_contribution.py` | `rico_selection/select_top_samples.py` | Top-score selection |
-| `003_get_training_data_format.py` | `rico_selection/format_alpaca.py` | Alpaca-format conversion |
-| `train_lora_num_cl.py` | `training/train_classifier.py` | LoRA selection-classifier training |
-| `train.py` | `training/train.py` | Final instruction tuning |
+| File | Purpose |
+| --- | --- |
+| `rico_selection/sample_candidates.py` | Candidate sampling and prompt formatting |
+| `rico_selection/compute_assessment_ppl.py` | Baseline `PPL(S)` |
+| `rico_selection/compute_context_ppl.py` | Candidate-conditioned `PPL(S\|T)` |
+| `rico_selection/compute_random_context_ppl.py` | Random-context control |
+| `rico_selection/compute_rico_scores.py` | Global RICo score aggregation |
+| `rico_selection/prepare_classifier_data.py` | Classifier label/data preparation |
+| `rico_selection/score_candidates.py` | Full-pool classifier scoring |
+| `rico_selection/select_top_samples.py` | Top-score selection |
+| `rico_selection/format_alpaca.py` | Alpaca-format conversion |
+| `training/train_classifier.py` | LoRA selection-classifier training |
+| `training/train.py` | Final instruction tuning |
 
 ## Released data
 
