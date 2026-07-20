@@ -1,6 +1,6 @@
 # Released data
 
-This directory contains the public 1,020-sample assessment set and the currently supplied RICo-selected instruction-tuning subsets. The files are preserved as supplied; dataset filenames and capitalization have not been normalized because they may be referenced by historical experiment commands.
+This directory contains the public 1,020-sample assessment set and the currently supplied RICo-selected instruction-tuning subsets.
 
 ## Assessment set
 
@@ -16,7 +16,7 @@ The assessment set is used only for assessment and has no overlap with the train
 
 ## Selected instruction-tuning subsets
 
-All selected-subset files are JSON arrays in Alpaca format with `instruction`, `input`, and `output` fields.
+All RICo-selected subset files are JSON arrays in Alpaca format with `instruction`, `input`, and `output` fields.
 
 | Selection model | Included subsets | Notes |
 | --- | --- | --- |
@@ -25,8 +25,9 @@ All selected-subset files are JSON arrays in Alpaca format with `instruction`, `
 | LLaMA3.1-8B | 7,800 | One low-ranked comparison subset |
 | Qwen2.5-3B | 520, 2,600, 5,200, 7,800 | Top-ranked 1%, 5%, 10%, and 15% subsets |
 
-The standalone per-sample RICo score files are not present in this directory yet.
-
 ## Source dataset links
 
-Exact source-dataset versions and download links will be added once confirmed by the authors.
+- Alpaca: [tatsu-lab/alpaca](https://huggingface.co/datasets/tatsu-lab/alpaca)
+- WizardLM-70K: [WizardLMTeam/WizardLM_evol_instruct_70k](https://huggingface.co/datasets/WizardLMTeam/WizardLM_evol_instruct_70k)
+- OpenOrca GPT-3.5/GPT-4: [Open-Orca/OpenOrca](https://huggingface.co/datasets/Open-Orca/OpenOrca)
+- Dolly-15K: [databricks/databricks-dolly-15k](https://huggingface.co/datasets/databricks/databricks-dolly-15k)
