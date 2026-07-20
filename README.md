@@ -196,6 +196,12 @@ The repository contains the final 1,020-sample assessment set and currently supp
 
 The training implementation in `training/train.py` and the adapted classifier-training implementation in `training/train_classifier.py` are based on the [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) training code. The original copyright and Apache License 2.0 notices are retained in both files.
 
+## License
+
+The RICo source code is released under the Apache License 2.0. See [`LICENSE`](LICENSE) for details.
+
+Third-party components retain their original licenses and attribution notices. Released data is subject to the terms of its respective source datasets.
+
 ## Citation
 
 ```bibtex
