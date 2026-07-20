@@ -21,8 +21,6 @@ RICo/
 └── requirements.txt
 ```
 
-The current repository is based on the more complete original `RICo` snapshot. The separately prepared `code&data` archive was used only to recover missing support files and clarify the public workflow.
-
 ## Environment
 
 The paper reports the following experiment environment:
