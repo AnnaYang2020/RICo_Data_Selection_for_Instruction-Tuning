@@ -6,7 +6,8 @@ Official implementation of **RICo: Refined In-Context Contribution for Automatic
 
 RICo is a gradient-free data-selection method that estimates the contribution of instruction-tuning samples through in-context learning. It measures task-level effects on a diverse assessment set, aggregates them into a global RICo score, and trains a lightweight classifier to scale selection to a full candidate pool.
 
-- Paper: [arXiv:2505.05327](https://arxiv.org/abs/2505.05327)
+- Paper: [AAAI Proceedings](https://ojs.aaai.org/index.php/AAAI/article/view/40732) | [arXiv:2505.05327](https://arxiv.org/abs/2505.05327)
+- Paper arXiv: [arXiv:2505.05327](https://arxiv.org/abs/2505.05327)
 - Project page: [annayang2020.github.io/RICo_Data_Selection](https://annayang2020.github.io/RICo_Data_Selection/)
 - Released data: [`data/README.md`](data/README.md)
 
