@@ -2,12 +2,13 @@
 
 Official implementation of **RICo: Refined In-Context Contribution for Automatic Instruction-Tuning Data Selection**.
 
+**Accepted to the 40th AAAI Conference on Artificial Intelligence (AAAI 2026).**
+
 RICo is a gradient-free data-selection method that estimates the contribution of instruction-tuning samples through in-context learning. It measures task-level effects on a diverse assessment set, aggregates them into a global RICo score, and trains a lightweight classifier to scale selection to a full candidate pool.
 
 - Paper: [arXiv:2505.05327](https://arxiv.org/abs/2505.05327)
 - Project page: [annayang2020.github.io/RICo_Data_Selection](https://annayang2020.github.io/RICo_Data_Selection/)
 - Released data: [`data/README.md`](data/README.md)
-- Reproducibility notes: [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md)
 
 ## Repository layout
 
@@ -16,10 +17,8 @@ RICo/
 ├── rico_selection/       # RICo scoring and scalable data selection
 ├── training/             # Classifier and instruction-tuning code
 │   └── config/           # DeepSpeed configuration
-├── analysis/             # Optional dataset-analysis utilities
 ├── data/                 # Assessment set and released selected subsets
-├── requirements.txt
-└── CITATION.cff
+└── requirements.txt
 ```
 
 The current repository is based on the more complete original `RICo` snapshot. The separately prepared `code&data` archive was used only to recover missing support files and clarify the public workflow.
@@ -130,8 +129,7 @@ bash training/run_train_classifier.sh \
     data_outputs/Llama-3.1-8B/classifier_data/Overall-influence_1020_data-noise-mean-sigmoid-train-cl-15per.json \
     data_outputs/Llama-3.1-8B/classifier_data/Overall-influence_1020_data-noise-mean-sigmoid-test-cl-15per.json \
     model_outputs/rico-classifier-llama3.1-8b-15per \
-    meta-llama/Llama-3.1-8B \
-    0
+    meta-llama/Llama-3.1-8B
 ```
 
 The wrapper preserves the reported classifier settings: 5 epochs, learning rate `5e-5`, LoRA rank 8, and LoRA alpha 8.
@@ -173,9 +171,7 @@ Train the target model on an Alpaca-format selected subset:
 bash training/run_instruction_tuning.sh \
     data/llama3.1-8B/alpaca-format-top_7800_samples.json \
     model_outputs/llama3.1-8b-rico-15per \
-    meta-llama/Llama-3.1-8B \
-    0 \
-    1191
+    meta-llama/Llama-3.1-8B
 ```
 
 The wrapper preserves the original snapshot's executable settings: 3 epochs, AdamW, learning rate `2e-5`, per-device batch size 4, gradient accumulation 8, and DeepSpeed offloading. The paper reports an effective batch size of 128; reproduce that total by adjusting the number of processes and/or gradient accumulation for the available GPU count. Alpaca uses a maximum input length of 512 in `training/train.py`.
@@ -198,27 +194,24 @@ The original numbered filenames were replaced with descriptive names. This table
 | `train_lora_num_cl.py` | `training/train_classifier.py` | LoRA selection-classifier training |
 | `train.py` | `training/train.py` | Final instruction tuning |
 
-The semantic-preservation audit, including the two necessary bug fixes and byte-level CPU-stage comparisons, is documented in [`SEMANTIC_AUDIT.md`](SEMANTIC_AUDIT.md).
-
-## Released data and SHA-256 checksums
+## Released data
 
 The repository contains the final 1,020-sample assessment set and currently supplied selected subsets for LLaMA2-7B, LLaMA3.1-8B, and Qwen2.5-3B. See [`data/README.md`](data/README.md) for sample counts and formats.
 
-[`data/SHA256SUMS`](data/SHA256SUMS) stores a SHA-256 digital fingerprint for each released JSON file. It allows users to verify that a downloaded file is byte-for-byte identical to the authors' copy; it does not alter the data and is not required by the RICo algorithm.
+## Code attribution
 
-```bash
-shasum -a 256 -c data/SHA256SUMS
-```
-
-## Optional task-distribution analysis
-
-```bash
-python -m pip install -r requirements-analysis.txt
-python -m spacy download en_core_web_sm
-python analysis/task_distribution.py \
-    data/llama3.1-8B/alpaca-format-top_7800_samples.json
-```
+The training implementation in `training/train.py` and the adapted classifier-training implementation in `training/train_classifier.py` are based on the [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) training code. The original copyright and Apache License 2.0 notices are retained in both files.
 
 ## Citation
 
-If you use this work, please cite the paper. A machine-readable citation is provided in [`CITATION.cff`](CITATION.cff).
+```bibtex
+@inproceedings{yang2026rico,
+  title={RICo: Refined In-Context Contribution for Automatic Instruction-Tuning Data Selection},
+  author={Yang, Yixin and Dong, Qingxiu and Yao, Linli and Zhu, Fangwei and Luo, Weilin and Wang, Bin and Sui, Zhifang},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={40},
+  number={40},
+  pages={34349--34357},
+  year={2026}
+}
+```
