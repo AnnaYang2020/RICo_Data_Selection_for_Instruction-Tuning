@@ -1,0 +1,8 @@
+accelerate
+deepspeed
+numpy
+pandas
+peft
+torch==2.4.0
+tqdm
+transformers
