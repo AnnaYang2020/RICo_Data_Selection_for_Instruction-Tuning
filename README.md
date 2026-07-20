@@ -1,4 +1,4 @@
-# RICo
+# RICo Data Selection
 
 Official implementation of **RICo: Refined In-Context Contribution for Automatic Instruction-Tuning Data Selection**.
 
